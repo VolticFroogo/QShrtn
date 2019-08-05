@@ -1,0 +1,30 @@
+nav {
+    font-family: "Roboto", sans-serif;
+}
+
+nav li a {
+    font-size: 1.2em;
+}
+
+.title {
+    font-family: "Roboto", sans-serif;
+    font-size: 2.5em;
+    padding-top: 3vh;
+    padding-bottom: 3vh;
+}
+
+#shorten {
+    height: 35vh;
+}
+
+#shorten-button {
+    margin-right: 20px;
+}
+
+#about p {
+    margin-bottom: 1vh;
+}
+
+#about {
+    margin-bottom: 3vh;
+}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>QShr.tn URL Shortener</title>
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/x-icon" href="img/favicon.ico"/>
+
+        <!-- Meta Tags -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="description" content="An open-source and anonymous URL shortener with a free API."/>
+        <meta name="keywords" content="qshr.tn, qshrtn, qshorten, q shorten, quick shorten">
+
+        <!-- Schema.org markup for Google+ -->
+        <meta itemprop="name" content="QShr.tn URL Shortener">
+        <meta itemprop="description" content="An open-source and anonymous URL shortener with a free API.">
+        <meta itemprop="image" content="https://qshr.tn/img/icon.png">
+
+        <!-- Open Graph data -->
+        <meta property="og:title" content="QShr.tn URL Shortener"/>
+        <meta property="og:url" content="https://qshr.tn/"/>
+        <meta property="og:image" content="https://qshr.tn/img/icon.png"/>
+        <meta property="og:description" content="An open-source and anonymous URL shortener with a free API."/>
+        <meta property="og:site_name" content="qshr.tn"/>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" integrity="sha384-5KZdSYqynSzIjQGS2M1O3HW6HVDBjfNx0v5Y2eQuE3vvQ9NTiiPK9/GWc0yYCrgw" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300">
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+    </head>
+
+    <body>
+        <!-- Sidenav for mobile -->
+        <ul class="sidenav" id="sidenav">
+            <li><a href="#shorten">Shorten</a></li>
+            <li><a href="#download">Download</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#developers">Developers</a></li>
+        </ul>
+
+        <!-- Navbar -->
+        <nav class="teal accent-4">
+            <div class="nav-wrapper container">
+                <a href="#" class="brand-logo">qshr.tn</a>
+                <a href="#" data-target="sidenav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="#shorten">Shorten</a></li>
+                    <li><a href="#download">Download</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#developers">Developers</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Shorten -->
+        <div class="container row valign-wrapper" id="shorten">
+            <form class="col s12">
+                <div class="input-field col s12">
+                    <input id="url" type="text">
+                    <label for="url">URL</label>
+                </div>
+                <div class="col s12 center-align">
+                    <a class="waves-effect waves-light btn-large teal accent-4" id="shorten-button">Shorten</a>
+                    <a class="waves-effect waves-light btn-large teal accent-4" id="copy-button" data-clipboard-target="#url">Copy</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Download -->
+        <div class="teal accent-4" id="download">
+            <div class="title center-align white-text">Download</div>
+        </div>
+
+        <!-- About -->
+        <div class="container" id="about">
+            <div class="title center-align">About</div>
+
+            <p class="center-align">QShr.tn is an <a href="/code">open-source</a>, anonymous URL shortening service with a free to use API for everybody.</p>
+            <p class="center-align">As we offer a completely anonymous service, the only information we store on a link is the URL on our page and the redirect URL. The creation time, creator and any people accessing the links are never stored.</p>
+            <p class="center-align">This site is primarily developed by me, Froogo, if you have any suggestions or bugs you can report them to me at my email: <a href="mailto:harry@froogo.co.uk">harry@froogo.co.uk</a>.</p>
+        </div>
+
+        <!-- Developers -->
+        <div class="teal accent-4" id="developers">
+            <div class="title center-align white-text">Developers</div>
+        </div>
+
+        <!-- JavaScript -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" integrity="sha384-ZOED+d9HxogEQwD+jFvux96iGQR9TxfJO+mPF2ZS0TuKH6eWrmvPsDpO6I0OWdiX" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha384-8CYhPwYlLELodlcQV713V9ZikA3DlCVaXFDpjHfP8Z36gpddf/Vrt47XmKDsCttu" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+    </body>
+</html>
