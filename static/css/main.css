@@ -35,7 +35,7 @@ input {
 
 #footer {
     bottom: 0;
-    transform: translateY(-8vh);
+    transform: translateY(-60px);
 }
 
 #download {
