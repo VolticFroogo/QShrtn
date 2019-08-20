@@ -68,12 +68,12 @@ $(document).ready(function(){
 
         // If we successfully shortened the URL:
         if (Code === 0) {
-            // Show a toast with the new URL.
-            M.toast({html: "Copied " + url + " to clipboard."});
-
             // Copy the URL to the clipboard.
             document.getElementById("url").select();
             document.execCommand("copy");
+
+            // Show a toast with the new URL.
+            M.toast({html: "Copied " + $("#url").val() + " to clipboard."});
         }
     });
 });
