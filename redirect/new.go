@@ -30,14 +30,14 @@ func New(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	url := strings.ToLower(data.URL)
+	lower := strings.ToLower(data.URL)
 
-	if strings.Contains(url, "qshr.tn") {
+	if strings.Contains(lower, "qshr.tn") {
 		helper.JSONResponse(model.Code{Code: model.ResponseForbiddenDomain}, w)
 		return
 	}
 
-	redirect, err := Insert(url)
+	redirect, err := Insert(data.URL)
 	if err != nil {
 		helper.JSONResponse(model.Code{Code: model.ResponseInternalServerError}, w)
 		log.Print(err)

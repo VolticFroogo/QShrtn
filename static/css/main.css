@@ -1,30 +1,30 @@
-nav {
+html, body, .valign-wrapper {
+    height: 100%;
+}
+
+body {
+    background-color: #282C34;
+    color: #ABB2BF;
+}
+
+.inner {
+    width: 20vw;
+    min-width: 250px;
+}
+
+h2 {
     font-family: "Roboto", sans-serif;
+    font-weight: 100;
+    margin-bottom: 50px;
 }
 
-nav li a {
-    font-size: 1.2em;
-}
-
-.title {
-    font-family: "Roboto", sans-serif;
-    font-size: 2.5em;
-    padding-top: 3vh;
-    padding-bottom: 3vh;
-}
-
-#shorten {
-    height: 35vh;
+input {
+    color: #ABB2BF;
 }
 
 #shorten-button {
-    margin-right: 20px;
-}
-
-#about p {
-    margin-bottom: 1vh;
-}
-
-#about {
-    margin-bottom: 3vh;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    margin-top: 50px;
+    background-color: #56B6C2;
 }

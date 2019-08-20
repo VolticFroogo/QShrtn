@@ -29,14 +29,17 @@ func Start() {
 		return
 	}
 
+	// Create a new Mux Router with strict slash.
 	r := mux.NewRouter()
 	r.StrictSlash(true)
 
+	// Handle new URL requests.
 	r.Handle("/new/", http.HandlerFunc(redirect.New)).Methods(http.MethodPost)
 
+	// Create a new static file server.
 	fileServer := http.FileServer(http.Dir("./static/"))
 
-	// Handle all static files.
+	// Handle all static files with the file server.
 	r.Path("/").Handler(fileServer)
 	r.Path("/robots.txt").Handler(fileServer)
 	r.PathPrefix("/not-found/").Handler(fileServer)
@@ -44,6 +47,7 @@ func Start() {
 	r.PathPrefix("/css/").Handler(fileServer)
 	r.PathPrefix("/js/").Handler(fileServer)
 
+	// Handle all unknown links, possibly redirecting links.
 	r.Handle("/{id}", http.HandlerFunc(redirect.Handle))
 
 	if cfg.SSL {
