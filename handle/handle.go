@@ -42,6 +42,7 @@ func Start() {
 	// Handle all static files with the file server.
 	r.Path("/").Handler(fileServer)
 	r.Path("/robots.txt").Handler(fileServer)
+	r.Path("/sitemap.xml").Handler(fileServer)
 	r.PathPrefix("/not-found/").Handler(fileServer)
 	r.PathPrefix("/img/").Handler(fileServer)
 	r.PathPrefix("/css/").Handler(fileServer)
