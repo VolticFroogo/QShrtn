@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/VolticFroogo/QShrtn/helper"
@@ -34,6 +35,12 @@ func New(w http.ResponseWriter, r *http.Request) {
 
 	if strings.Contains(lower, "qshr.tn") {
 		helper.JSONResponse(model.Code{Code: model.ResponseForbiddenDomain}, w)
+		return
+	}
+
+	_, err = url.ParseRequestURI(data.URL)
+	if err != nil {
+		helper.JSONResponse(model.Code{Code: model.ResponseInvalidURL}, w)
 		return
 	}
 

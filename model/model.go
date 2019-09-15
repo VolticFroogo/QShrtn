@@ -9,6 +9,7 @@ const (
 	ResponseInternalServerError
 	ResponseForbiddenDomain
 	ResponseIDTaken
+	ResponseInvalidURL
 )
 
 const (

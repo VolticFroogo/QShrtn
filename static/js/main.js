@@ -2,7 +2,8 @@ const ResponseCode = {
     Success: 0,
     InternalServerError: 1,
     ForbiddenDomain: 2,
-    TakenID: 3
+    TakenID: 3,
+    InvalidURL: 4
 };
 
 $(document).ready(function(){
@@ -89,6 +90,11 @@ $(document).ready(function(){
                     // Taken ID.
                     case ResponseCode.TakenID:
                         M.toast({html: "That custom link has already been taken."});
+                        break;
+
+                    // Invalid URL.
+                    case ResponseCode.InvalidURL:
+                        M.toast({html: "That is not a valid URL."});
                         break;
                 }
             }
