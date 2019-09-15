@@ -8,6 +8,10 @@ html {
     min-height: 100vh;
 }
 
+#logo {
+    width: 50px;
+}
+
 .valign-wrapper {
     height: 100vh;
 }
@@ -23,7 +27,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #title {
-    margin-bottom: 50px;
+    margin-top: 0;
+    margin-bottom: 40px;
 }
 
 input {
