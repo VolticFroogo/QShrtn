@@ -8,6 +8,7 @@ const (
 	ResponseSuccess = iota
 	ResponseInternalServerError
 	ResponseForbiddenDomain
+	ResponseIDTaken
 )
 
 const (

@@ -11,7 +11,7 @@ import (
 )
 
 type newReq struct {
-	URL string
+	URL, ID string
 }
 
 type newRes struct {
@@ -37,11 +37,33 @@ func New(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	redirect, err := Insert(data.URL)
-	if err != nil {
-		helper.JSONResponse(model.Code{Code: model.ResponseInternalServerError}, w)
-		log.Print(err)
-		return
+	var redirect model.Redirect
+
+	if data.ID == "" {
+		redirect, err = Insert(data.URL)
+		if err != nil {
+			helper.JSONResponse(model.Code{Code: model.ResponseInternalServerError}, w)
+			log.Print(err)
+			return
+		}
+	} else {
+		redirect = model.Redirect{
+			ID:  data.ID,
+			URL: data.URL,
+		}
+
+		err = InsertWithID(redirect)
+
+		if err != nil {
+			if err == ErrIDTaken {
+				helper.JSONResponse(model.Code{Code: model.ResponseIDTaken}, w)
+				return
+			}
+
+			helper.JSONResponse(model.Code{Code: model.ResponseInternalServerError}, w)
+			log.Print(err)
+			return
+		}
 	}
 
 	helper.JSONResponse(newRes{

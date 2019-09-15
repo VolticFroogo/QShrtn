@@ -1,6 +1,36 @@
+const ResponseCode = {
+    Success: 0,
+    InternalServerError: 1,
+    ForbiddenDomain: 2,
+    TakenID: 3
+};
+
 $(document).ready(function(){
+    var customURLVisible = false;
+
+    // When the custom URL button is clicked, toggle the visibility of everything.
+    $("#custom-url-button").click(function(){
+        if (customURLVisible) {
+            $("#custom-url").hide();
+            $("#custom-url-button .up").hide();
+            $("#custom-url-button .down").show();
+        } else {
+            $("#custom-url").show();
+            $("#custom-url-button .up").show();
+            $("#custom-url-button .down").hide();
+        }
+
+        customURLVisible = !customURLVisible;
+    });
+
+    // When the "scroll down" button is pressed, scroll down to download
+    $("#footer").click(function(){
+        $("#download")[0].scrollIntoView();
+    });
+
     $("#shorten-button").click(function(){
         var url = $("#url").val();
+        var id = $("#custom-url").val();
         var lower = url.toLowerCase();
 
         // You can't shorten qshr.tn links, so we'll assume they want to copy it.
@@ -24,9 +54,15 @@ $(document).ready(function(){
             type: "POST",
             async: false,
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({
-                URL: url
-            }),
+            data: JSON.stringify(customURLVisible ?
+                {   // If custom URL is visible, include an ID.
+                    URL: url,
+                    ID: id
+                }:
+                {   // Otherwise, just send the URL.
+                    URL: url
+                }
+            ),
             dataType: "json",
             success: function(r) {
                 // Set the code for the code outside of the AJAX scope.
@@ -34,20 +70,25 @@ $(document).ready(function(){
 
                 switch(r.Code) {
                     // Success.
-                    case 0:
+                    case ResponseCode.Success:
                         // Set the URL field to our new URL.
                         $("#url").val("https://qshr.tn/" + r.ID);
 
                         break;
 
                     // Internal server error.
-                    case 1:
+                    case ResponseCode.InternalServerError:
                         M.toast({html: "Internal server error."});
                         break;
 
                     // Forbidden domain.
-                    case 2:
+                    case ResponseCode.ForbiddenDomain:
                         M.toast({html: "You can not shorten qshr.tn links."});
+                        break;
+
+                    // Taken ID.
+                    case ResponseCode.TakenID:
+                        M.toast({html: "That custom link has already been taken."});
                         break;
                 }
             }

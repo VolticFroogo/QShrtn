@@ -2,11 +2,16 @@ package redirect
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/VolticFroogo/QShrtn/helper"
 
 	"github.com/VolticFroogo/QShrtn/db"
 	"github.com/VolticFroogo/QShrtn/model"
+)
+
+var (
+	ErrIDTaken = fmt.Errorf("id already taken")
 )
 
 // FromID gets a redirect from the database given an ID.
@@ -58,6 +63,26 @@ func Insert(url string) (redirect model.Redirect, err error) {
 		if err != nil {
 			return
 		}
+	}
+
+	// Insert the redirect into the DB.
+	_, err = db.Dot.Exec(
+		db.SQL,
+		"insert-redirect",
+		redirect.ID,
+		redirect.URL,
+	)
+
+	return
+}
+
+func InsertWithID(redirect model.Redirect) (err error) {
+	_, err = FromID(redirect.ID)
+	if err != nil && err != sql.ErrNoRows {
+		return
+	} else if err == nil {
+		err = ErrIDTaken
+		return
 	}
 
 	// Insert the redirect into the DB.

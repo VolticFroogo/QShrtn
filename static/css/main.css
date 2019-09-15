@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 #intro {
     background-color: #282C34;
     color: #ABB2BF;
@@ -26,10 +30,15 @@ input {
     color: #ABB2BF;
 }
 
+#custom-url-button {
+    margin-top: 20px;
+    cursor: pointer;
+}
+
 #shorten-button {
     font-family: "Roboto", sans-serif;
     font-weight: 300;
-    margin-top: 50px;
+    margin-top: 30px;
     background-color: #56B6C2;
 }
 
