@@ -25,5 +25,11 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Let clients cache our response for speed.
+	// Public: responses will always be the same for all clients, proxies can cache this.
+	// Max-Age: cache this response for one year.
+	// Immutable: the response will never change.
+	w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
+
 	http.Redirect(w, r, redirect.URL, http.StatusMovedPermanently)
 }
