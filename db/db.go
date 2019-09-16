@@ -24,7 +24,7 @@ var (
 
 // Config is the config structure.
 type Config struct {
-	Name, Password, IP, Port, Database, QueriesDirectory string
+	Name, Password, Protocol, Location, Database, QueriesDirectory string
 }
 
 // Init initialises the database.
@@ -40,7 +40,7 @@ func Init() (err error) {
 	log.Print("Connecting to database.")
 
 	// Create the connection string from the config.
-	connection := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v", cfg.Name, cfg.Password, cfg.IP, cfg.Port, cfg.Database)
+	connection := fmt.Sprintf("%v:%v@%v(%v)/%v", cfg.Name, cfg.Password, cfg.Protocol, cfg.Location, cfg.Database)
 
 	// Open the SQL connection.
 	SQL, err = sql.Open("mysql", connection)
