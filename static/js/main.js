@@ -46,6 +46,21 @@ $(document).ready(function(){
             return;
         }
 
+        // Tell the user if their URL is too long.
+        if (url.length > 2048) {
+            // Show a toast with the new URL.
+            M.toast({html: "URL is too long, maximum size is 2048."});
+
+            return;
+        }
+
+        // Tell the user if their ID is too long.
+        if (id.length > 8) {
+            M.toast({html: "Custom URL is too long, maximum size is 8."});
+
+            return;
+        }
+
         // Define our code outside of the AJAX scope.
         var Code = -1;
 
