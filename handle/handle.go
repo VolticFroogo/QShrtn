@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/VolticFroogo/QShrtn/config"
 	"github.com/VolticFroogo/QShrtn/redirect"
+	"github.com/VolticFroogo/config"
 	"github.com/gorilla/mux"
 )
 
@@ -56,12 +56,12 @@ func Start() {
 		log.Printf("Listening for incoming HTTPS requests on port %v.", cfg.Port)
 
 		// Serve TLS using the certificate and key files from the config.
-		http.ListenAndServeTLS(":"+cfg.Port, cfg.Certificate, cfg.Key, r)
+		_ = http.ListenAndServeTLS(":"+cfg.Port, cfg.Certificate, cfg.Key, r)
 	} else {
 		// Otherwise:
 		log.Printf("Listening for incoming HTTP requests on port %v.", cfg.Port)
 
 		// Serve plain HTTP responses.
-		http.ListenAndServe(":"+cfg.Port, r)
+		_ = http.ListenAndServe(":"+cfg.Port, r)
 	}
 }

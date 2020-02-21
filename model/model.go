@@ -1,7 +1,8 @@
 package model
 
 type Redirect struct {
-	ID, URL string
+	ID  string `bson:"_id"`
+	URL string `bson:"url"`
 }
 
 const (

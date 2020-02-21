@@ -1,13 +1,13 @@
 package db
 
 import (
-	"database/sql"
-	"fmt"
-	"log"
+	"context"
+	"time"
 
-	"github.com/VolticFroogo/QShrtn/config"
-	"github.com/gchaincl/dotsql"
-	_ "github.com/go-sql-driver/mysql" // MySQL Driver.
+	"github.com/VolticFroogo/config"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
 const (
@@ -15,16 +15,12 @@ const (
 )
 
 var (
-	// SQL is the global database DB connection.
-	SQL *sql.DB
-
-	// Dot is all of the loaded queries.
-	Dot *dotsql.DotSql
+	Redirect *mongo.Collection
 )
 
 // Config is the config structure.
 type Config struct {
-	Name, Password, Protocol, Location, Database, QueriesDirectory string
+	URI string
 }
 
 // Init initialises the database.
@@ -36,19 +32,26 @@ func Init() (err error) {
 		return
 	}
 
-	// Log that we are connecting to the database.
-	log.Print("Connecting to database.")
+	opts := options.Client().ApplyURI(cfg.URI)
 
-	// Create the connection string from the config.
-	connection := fmt.Sprintf("%v:%v@%v(%v)/%v", cfg.Name, cfg.Password, cfg.Protocol, cfg.Location, cfg.Database)
-
-	// Open the SQL connection.
-	SQL, err = sql.Open("mysql", connection)
+	client, err := mongo.NewClient(opts)
 	if err != nil {
 		return
 	}
 
-	// Load the queries SQL file.
-	Dot, err = dotsql.LoadFromFile(cfg.QueriesDirectory)
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	err = client.Connect(ctx)
+	if err != nil {
+		return
+	}
+
+	err = client.Ping(ctx, readpref.Nearest())
+	if err != nil {
+		return
+	}
+
+	db := client.Database("qshrtn")
+
+	Redirect = db.Collection("redirect")
 	return
 }

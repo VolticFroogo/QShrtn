@@ -1,11 +1,11 @@
 package redirect
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/VolticFroogo/QShrtn/helper"
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func Handle(w http.ResponseWriter, r *http.Request) {
@@ -14,9 +14,9 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 
 	id := vars["id"]
 
-	redirect, err := FromID(id)
+	redirect, err := FromShort(id)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if err == mongo.ErrNoDocuments {
 			http.Redirect(w, r, "/not-found/", http.StatusTemporaryRedirect)
 			return
 		}

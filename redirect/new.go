@@ -26,7 +26,7 @@ func New(w http.ResponseWriter, r *http.Request) {
 	var data newReq
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
-		helper.JSONResponse(model.Code{Code: model.ResponseInternalServerError}, w)
+		_ = helper.JSONResponse(model.Code{Code: model.ResponseInternalServerError}, w)
 		log.Print(err)
 		return
 	}
@@ -34,13 +34,13 @@ func New(w http.ResponseWriter, r *http.Request) {
 	lower := strings.ToLower(data.URL)
 
 	if strings.Contains(lower, "qshr.tn") {
-		helper.JSONResponse(model.Code{Code: model.ResponseForbiddenDomain}, w)
+		_ = helper.JSONResponse(model.Code{Code: model.ResponseForbiddenDomain}, w)
 		return
 	}
 
 	_, err = url.ParseRequestURI(data.URL)
 	if err != nil {
-		helper.JSONResponse(model.Code{Code: model.ResponseInvalidURL}, w)
+		_ = helper.JSONResponse(model.Code{Code: model.ResponseInvalidURL}, w)
 		return
 	}
 
@@ -49,7 +49,7 @@ func New(w http.ResponseWriter, r *http.Request) {
 	if data.ID == "" {
 		redirect, err = Insert(data.URL)
 		if err != nil {
-			helper.JSONResponse(model.Code{Code: model.ResponseInternalServerError}, w)
+			_ = helper.JSONResponse(model.Code{Code: model.ResponseInternalServerError}, w)
 			log.Print(err)
 			return
 		}
@@ -59,21 +59,21 @@ func New(w http.ResponseWriter, r *http.Request) {
 			URL: data.URL,
 		}
 
-		err = InsertWithID(redirect)
+		err = InsertWithShort(redirect)
 
 		if err != nil {
 			if err == ErrIDTaken {
-				helper.JSONResponse(model.Code{Code: model.ResponseIDTaken}, w)
+				_ = helper.JSONResponse(model.Code{Code: model.ResponseIDTaken}, w)
 				return
 			}
 
-			helper.JSONResponse(model.Code{Code: model.ResponseInternalServerError}, w)
+			_ = helper.JSONResponse(model.Code{Code: model.ResponseInternalServerError}, w)
 			log.Print(err)
 			return
 		}
 	}
 
-	helper.JSONResponse(newRes{
+	_ = helper.JSONResponse(newRes{
 		Code: model.ResponseSuccess,
 		ID:   redirect.ID,
 	}, w)
