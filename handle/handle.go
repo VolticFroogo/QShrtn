@@ -5,30 +5,11 @@ import (
 	"net/http"
 
 	"github.com/VolticFroogo/QShrtn/redirect"
-	"github.com/VolticFroogo/config"
 	"github.com/gorilla/mux"
 )
 
-const (
-	configDirectory = "configs/handle.ini"
-)
-
-// Config is the config structure.
-type Config struct {
-	Port, Certificate, Key string
-	SSL                    bool
-}
-
 // Start begins listening for all incoming requests.
 func Start() {
-	// Load the config.
-	cfg := Config{}
-	err := config.Load(configDirectory, &cfg)
-	if err != nil {
-		log.Print(err)
-		return
-	}
-
 	// Create a new Mux Router with strict slash.
 	r := mux.NewRouter()
 	r.StrictSlash(true)
@@ -51,17 +32,8 @@ func Start() {
 	// Handle all unknown links, possibly redirecting links.
 	r.Handle("/{id}", http.HandlerFunc(redirect.Handle))
 
-	if cfg.SSL {
-		// If we are using SSL encryption (HTTPS):
-		log.Printf("Listening for incoming HTTPS requests on port %v.", cfg.Port)
+	log.Print("Listening for incoming HTTP requests on port 80.")
 
-		// Serve TLS using the certificate and key files from the config.
-		_ = http.ListenAndServeTLS(":"+cfg.Port, cfg.Certificate, cfg.Key, r)
-	} else {
-		// Otherwise:
-		log.Printf("Listening for incoming HTTP requests on port %v.", cfg.Port)
-
-		// Serve plain HTTP responses.
-		_ = http.ListenAndServe(":"+cfg.Port, r)
-	}
+	// Serve plain HTTP responses.
+	_ = http.ListenAndServe(":80", r)
 }
