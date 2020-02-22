@@ -9,3 +9,6 @@ services:
       - "eu-lon-1:95.179.202.255"
       - "na-chi-1:66.42.116.36"
       - "as-sin-1:207.148.125.92"
+    restart: unless-stopped
+    container_name: qshrtn
+    image: qshrtn
