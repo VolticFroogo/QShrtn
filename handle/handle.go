@@ -9,7 +9,7 @@ import (
 )
 
 // Start begins listening for all incoming requests.
-func Start() {
+func Start() (err error) {
 	// Create a new Mux Router with strict slash.
 	r := mux.NewRouter()
 	r.StrictSlash(true)
@@ -35,5 +35,6 @@ func Start() {
 	log.Print("Listening for incoming HTTP requests on port 80.")
 
 	// Serve plain HTTP responses.
-	_ = http.ListenAndServe(":80", r)
+	err = http.ListenAndServe(":80", r)
+	return
 }

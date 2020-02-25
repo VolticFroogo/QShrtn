@@ -5,6 +5,7 @@ services:
     build: .
     ports:
       - 81:80
+    env_file: production.env
     restart: unless-stopped
     container_name: qshrtn
     image: qshrtn

@@ -3,7 +3,6 @@ package redirect
 import (
 	"context"
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/VolticFroogo/QShrtn/db"
@@ -56,13 +55,15 @@ func Insert(url string) (redirect model.Redirect, err error) {
 	for {
 		redirect.ID = helper.GenerateRandomString(model.IDLength)
 
-		_, err = FromShort(redirect.ID)
-		if err == mongo.ErrNoDocuments {
-			break
+		count, err := db.Redirect.CountDocuments(ctx, bson.M{
+			"_id": redirect.ID,
+		})
+		if err != nil {
+			return redirect, err
 		}
 
-		if err != nil {
-			return
+		if count == 0 {
+			break
 		}
 	}
 
@@ -74,11 +75,26 @@ func Insert(url string) (redirect model.Redirect, err error) {
 func InsertWithShort(redirect model.Redirect) (err error) {
 	ctx := context.Background()
 
+	// Check if this ID is already in use.
+	// Note: this isn't necessary as unique collisions will be detected below,
+	// however this will improve performance on secondary DB machines.
+	// Secondaries can count at very low cost using indexes, but writes require network calls.
+	count, err := db.Redirect.CountDocuments(ctx, bson.M{
+		"_id": redirect.ID,
+	})
+	if err != nil {
+		return
+	}
+
+	if count != 0 {
+		err = ErrIDTaken
+		return
+	}
+
 	_, err = db.Redirect.InsertOne(ctx, redirect)
 
 	// Check if the error is a unique key collision.
 	if err != nil && strings.Contains(err.Error(), "duplicate key error") {
-		log.Print(err)
 		err = ErrIDTaken
 	}
 

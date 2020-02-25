@@ -2,37 +2,23 @@ package db
 
 import (
 	"context"
+	"os"
 	"time"
 
-	"github.com/VolticFroogo/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-const (
-	configDirectory = "configs/db.ini"
-)
-
 var (
+	uri = os.Getenv("DB")
+
 	Redirect *mongo.Collection
 )
 
-// Config is the config structure.
-type Config struct {
-	URI string
-}
-
 // Init initialises the database.
 func Init() (err error) {
-	// Load the config.
-	cfg := Config{}
-	err = config.Load(configDirectory, &cfg)
-	if err != nil {
-		return
-	}
-
-	opts := options.Client().ApplyURI(cfg.URI)
+	opts := options.Client().ApplyURI(uri)
 
 	client, err := mongo.NewClient(opts)
 	if err != nil {

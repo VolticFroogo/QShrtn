@@ -20,5 +20,9 @@ func main() {
 	}
 
 	// Start handling incoming requests.
-	handle.Start()
+	err = handle.Start()
+	if err != nil {
+		log.Print(err)
+		return
+	}
 }
