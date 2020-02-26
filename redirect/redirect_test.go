@@ -49,10 +49,10 @@ func init() {
 		// Handle all unknown links, possibly redirecting links.
 		r.Handle("/{id}", http.HandlerFunc(Handle))
 
-		log.Print("Listening for incoming HTTP requests on port 80.")
+		log.Print("Listening for incoming HTTP requests on port 8080.")
 
 		// Serve plain HTTP responses.
-		err = http.ListenAndServe(":80", r)
+		err = http.ListenAndServe(":8080", r)
 
 		if err != nil {
 			log.Fatalf("Could not start handler: %v", err)
