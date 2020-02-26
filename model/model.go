@@ -14,7 +14,8 @@ const (
 )
 
 const (
-	IDLength = 4
+	IDLength     = 4
+	MaxURLLength = 2048
 )
 
 // Code is the struct used in JSON responses with just a code.

@@ -1,0 +1,23 @@
+# Golang CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-go/ for more details
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.13.8
+        environment:
+          DB: mongodb://root:password@localhost/?authSource=admin&appname=qshrtn&ssl=false
+      - image: circleci/mongo:4.2.3-bionic
+        environment:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: password
+    working_directory: /go/src/github.com/VolticFroogo/QShrtn
+    steps:
+      - checkout
+      - run:
+        name: Get Go dependencies
+        command: go get -v -t -d ./...
+      - run:
+        name: Run tests
+        command: go test -v ./...

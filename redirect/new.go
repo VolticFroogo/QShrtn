@@ -38,6 +38,11 @@ func New(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if len(data.URL) > 2048 {
+		_ = helper.JSONResponse(model.Code{Code: model.ResponseInvalidURL}, w)
+		return
+	}
+
 	_, err = url.ParseRequestURI(data.URL)
 	if err != nil {
 		_ = helper.JSONResponse(model.Code{Code: model.ResponseInvalidURL}, w)
