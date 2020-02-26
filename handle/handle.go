@@ -31,6 +31,7 @@ func Start() (err error) {
 
 	// Handle all unknown links, possibly redirecting links.
 	r.Handle("/{id}", http.HandlerFunc(redirect.Handle))
+	r.Handle("/{id}/json", http.HandlerFunc(redirect.JSON))
 
 	log.Print("Listening for incoming HTTP requests on port 80.")
 

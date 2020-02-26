@@ -8,6 +8,7 @@ jobs:
       - image: circleci/golang:1.13.8
         environment:
           DB: mongodb://root:password@localhost/?authSource=admin&appname=qshrtn&ssl=false
+          DOMAIN: qshr.tn
       - image: circleci/mongo:4.2.3-bionic
         environment:
           MONGO_INITDB_ROOT_USERNAME: root

@@ -52,6 +52,7 @@ func init() {
 
 		// Handle all unknown links, possibly redirecting links.
 		r.Handle("/{id}", http.HandlerFunc(Handle))
+		r.Handle("/{id}/json", http.HandlerFunc(JSON))
 
 		log.Print("Listening for incoming HTTP requests on port 8080.")
 
@@ -87,6 +88,36 @@ func TestHandle(t *testing.T) {
 	assert.Equal("/not-found/", res.Header.Get("location"))
 }
 
+func TestJSON(t *testing.T) {
+	assert := assert.New(t)
+
+	// Insert a test entry into the database.
+	_, err := db.Redirect.InsertOne(ctx, model.Redirect{
+		ID:  "json",
+		URL: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+	})
+	assert.Nil(err)
+
+	var decoded jsonResponse
+
+	t.Log("Checking an existing link via the JSON API.")
+	res, err := client.Get(urlPrefix + "json/json")
+	assert.Nil(err)
+	assert.Equal(http.StatusOK, res.StatusCode)
+	err = json.NewDecoder(res.Body).Decode(&decoded)
+	assert.Nil(err)
+	assert.Equal(responseSuccess, decoded.Code)
+	assert.Equal("https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON", decoded.URL)
+
+	t.Log("Checking a non-existent link via the JSON API.")
+	res, err = client.Get(urlPrefix + "unknown/json")
+	assert.Nil(err)
+	assert.Equal(http.StatusOK, res.StatusCode)
+	err = json.NewDecoder(res.Body).Decode(&decoded)
+	assert.Nil(err)
+	assert.Equal(responseNotFound, decoded.Code)
+}
+
 func TestNew(t *testing.T) {
 	assert := assert.New(t)
 
@@ -94,7 +125,7 @@ func TestNew(t *testing.T) {
 	_, decoded, document := insert(newReq{
 		URL: "https://atrello.co.uk/",
 	}, assert, true)
-	assert.Equal(model.ResponseSuccess, decoded.Code)
+	assert.Equal(newResponseSuccess, decoded.Code)
 	assert.Equal("https://atrello.co.uk/", document.URL)
 
 	t.Log("Inserting a valid redirect with specified ID.")
@@ -102,7 +133,7 @@ func TestNew(t *testing.T) {
 		URL: "https://duckduckgo.com/",
 		ID:  "ddg",
 	}, assert, true)
-	assert.Equal(model.ResponseSuccess, decoded.Code)
+	assert.Equal(newResponseSuccess, decoded.Code)
 	assert.Equal("https://duckduckgo.com/", document.URL)
 	assert.Equal("ddg", document.ID)
 
@@ -116,25 +147,25 @@ func TestNew(t *testing.T) {
 		URL: "https://stackoverflow.com/",
 		ID:  "taken",
 	}, assert, false)
-	assert.Equal(model.ResponseIDTaken, decoded.Code)
+	assert.Equal(newResponseIDTaken, decoded.Code)
 
 	t.Log("Inserting an invalid redirect due to the URL being invalid.")
 	_, decoded, _ = insert(newReq{
 		URL: "invalid-url",
 	}, assert, false)
-	assert.Equal(model.ResponseInvalidURL, decoded.Code)
+	assert.Equal(newResponseInvalidURL, decoded.Code)
 
 	t.Log("Inserting an invalid redirect due to the URL being too long.")
 	_, decoded, _ = insert(newReq{
 		URL: "https://froogo.co.uk/" + helper.GenerateRandomString(model.MaxURLLength),
 	}, assert, false)
-	assert.Equal(model.ResponseInvalidURL, decoded.Code)
+	assert.Equal(newResponseInvalidURL, decoded.Code)
 
 	t.Log("Inserting an invalid redirect due to the URL containing a forbidden domain.")
 	_, decoded, _ = insert(newReq{
-		URL: "https://qshr.tn/test",
+		URL: "https://" + domain + "/test",
 	}, assert, false)
-	assert.Equal(model.ResponseForbiddenDomain, decoded.Code)
+	assert.Equal(newResponseForbiddenDomain, decoded.Code)
 }
 
 func insert(request newReq, assert *assert.Assertions, valid bool) (res *http.Response, decoded newRes, document model.Redirect) {

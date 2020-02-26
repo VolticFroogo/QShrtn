@@ -34,8 +34,8 @@ $(document).ready(function(){
         var id = $("#custom-url").val();
         var lower = url.toLowerCase();
 
-        // You can't shorten qshr.tn links, so we'll assume they want to copy it.
-        if (lower.includes("qshr.tn")) {
+        // You can't create recursive links, so we'll assume they want to copy it.
+        if (lower.includes(window.location.hostname)) {
             // Show a toast with the new URL.
             M.toast({html: "Copied " + url + " to clipboard."});
 
@@ -72,29 +72,29 @@ $(document).ready(function(){
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(customURLVisible ?
                 {   // If custom URL is visible, include an ID.
-                    URL: url,
-                    ID: id
+                    url: url,
+                    id: id
                 }:
                 {   // Otherwise, just send the URL.
-                    URL: url
+                    url: url
                 }
             ),
             dataType: "json",
             success: function(r) {
                 // Set the code for the code outside of the AJAX scope.
-                Code = r.Code;
+                Code = r.code;
 
-                switch(r.Code) {
+                switch (r.code) {
                     // Success.
                     case ResponseCode.Success:
                         // Set the URL field to our new URL.
-                        $("#url").val("https://qshr.tn/" + r.ID);
+                        $("#url").val(window.location.protocol + "//" + window.location.hostname + "/" + r.id);
 
                         break;
 
                     // Internal server error.
                     case ResponseCode.InternalServerError:
-                        M.toast({html: "Internal server error."});
+                        M.toast({html: "Internal server error: " + r.error});
                         break;
 
                     // Forbidden domain.

@@ -6,19 +6,6 @@ type Redirect struct {
 }
 
 const (
-	ResponseSuccess = iota
-	ResponseInternalServerError
-	ResponseForbiddenDomain
-	ResponseIDTaken
-	ResponseInvalidURL
-)
-
-const (
 	IDLength     = 4
 	MaxURLLength = 2048
 )
-
-// Code is the struct used in JSON responses with just a code.
-type Code struct {
-	Code int
-}

@@ -5,20 +5,35 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 
 	"github.com/VolticFroogo/QShrtn/helper"
 	"github.com/VolticFroogo/QShrtn/model"
 )
 
+const (
+	newResponseSuccess = iota
+	newResponseInternalServerError
+	newResponseForbiddenDomain
+	newResponseIDTaken
+	newResponseInvalidURL
+)
+
 type newReq struct {
-	URL, ID string
+	URL string `json:"url"`
+	ID  string `json:"id"`
 }
 
 type newRes struct {
-	Code int
-	ID   string
+	Code  int    `json:"code"`
+	ID    string `json:"id,omitempty"`
+	Error string `json:"error,omitempty"`
 }
+
+var (
+	domain = os.Getenv("DOMAIN")
+)
 
 // New creates a new redirect.
 func New(w http.ResponseWriter, r *http.Request) {
@@ -26,26 +41,26 @@ func New(w http.ResponseWriter, r *http.Request) {
 	var data newReq
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
-		_ = helper.JSONResponse(model.Code{Code: model.ResponseInternalServerError}, w)
+		_ = helper.JSONResponse(newRes{Code: newResponseInternalServerError, Error: err.Error()}, w)
 		log.Print(err)
 		return
 	}
 
 	lower := strings.ToLower(data.URL)
 
-	if strings.Contains(lower, "qshr.tn") {
-		_ = helper.JSONResponse(model.Code{Code: model.ResponseForbiddenDomain}, w)
+	if strings.Contains(lower, domain) {
+		_ = helper.JSONResponse(newRes{Code: newResponseForbiddenDomain}, w)
 		return
 	}
 
 	if len(data.URL) > 2048 {
-		_ = helper.JSONResponse(model.Code{Code: model.ResponseInvalidURL}, w)
+		_ = helper.JSONResponse(newRes{Code: newResponseInvalidURL}, w)
 		return
 	}
 
 	_, err = url.ParseRequestURI(data.URL)
 	if err != nil {
-		_ = helper.JSONResponse(model.Code{Code: model.ResponseInvalidURL}, w)
+		_ = helper.JSONResponse(newRes{Code: newResponseInvalidURL}, w)
 		return
 	}
 
@@ -54,7 +69,7 @@ func New(w http.ResponseWriter, r *http.Request) {
 	if data.ID == "" {
 		redirect, err = Insert(data.URL)
 		if err != nil {
-			_ = helper.JSONResponse(model.Code{Code: model.ResponseInternalServerError}, w)
+			_ = helper.JSONResponse(newRes{Code: newResponseInternalServerError, Error: err.Error()}, w)
 			log.Print(err)
 			return
 		}
@@ -68,18 +83,18 @@ func New(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			if err == ErrIDTaken {
-				_ = helper.JSONResponse(model.Code{Code: model.ResponseIDTaken}, w)
+				_ = helper.JSONResponse(newRes{Code: newResponseIDTaken}, w)
 				return
 			}
 
-			_ = helper.JSONResponse(model.Code{Code: model.ResponseInternalServerError}, w)
+			_ = helper.JSONResponse(newRes{Code: newResponseInternalServerError, Error: err.Error()}, w)
 			log.Print(err)
 			return
 		}
 	}
 
 	_ = helper.JSONResponse(newRes{
-		Code: model.ResponseSuccess,
+		Code: newResponseSuccess,
 		ID:   redirect.ID,
 	}, w)
 }
