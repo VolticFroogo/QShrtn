@@ -20,6 +20,10 @@ const (
 	contentType = "application/json; charset=UTF-8"
 )
 
+const (
+	urlPrefix = "http://localhost:8080/"
+)
+
 var (
 	// Helper variables for testing.
 	ctx    = context.Background()
@@ -71,13 +75,13 @@ func TestHandle(t *testing.T) {
 	assert.Nil(err)
 
 	t.Log("Checking an existing link.")
-	res, err := client.Get("http://localhost/test")
+	res, err := client.Get(urlPrefix + "test")
 	assert.Nil(err)
 	assert.Equal(http.StatusMovedPermanently, res.StatusCode)
 	assert.Equal("https://froogo.co.uk/", res.Header.Get("location"))
 
 	t.Log("Checking a non-existent link.")
-	res, err = client.Get("http://localhost/unknown")
+	res, err = client.Get(urlPrefix + "unknown")
 	assert.Nil(err)
 	assert.Equal(http.StatusTemporaryRedirect, res.StatusCode)
 	assert.Equal("/not-found/", res.Header.Get("location"))
@@ -137,7 +141,7 @@ func insert(request newReq, assert *assert.Assertions, valid bool) (res *http.Re
 	req, err := json.Marshal(request)
 	assert.Nil(err)
 
-	res, err = client.Post("http://localhost/new/", contentType, bytes.NewBuffer(req))
+	res, err = client.Post(urlPrefix+"new/", contentType, bytes.NewBuffer(req))
 	assert.Nil(err)
 	assert.Equal(http.StatusOK, res.StatusCode)
 
