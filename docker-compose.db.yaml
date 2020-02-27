@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  app:
+    build: .
+    ports:
+      - 81:80
+    env_file: production.env
+    restart: unless-stopped
+    container_name: qshrtn
+    image: qshrtn
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:4.2.3-bionic
+    restart: unless-stopped
+    env_file: db.env
+    container_name: qshrtn_mongo

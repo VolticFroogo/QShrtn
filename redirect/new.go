@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 
 	"github.com/VolticFroogo/QShrtn/helper"
@@ -31,10 +30,6 @@ type newRes struct {
 	Error string `json:"error,omitempty"`
 }
 
-var (
-	domain = os.Getenv("DOMAIN")
-)
-
 // New creates a new redirect.
 func New(w http.ResponseWriter, r *http.Request) {
 	// Get data from the JSON request.
@@ -47,8 +42,9 @@ func New(w http.ResponseWriter, r *http.Request) {
 	}
 
 	lower := strings.ToLower(data.URL)
+	host := strings.ToLower(r.Host)
 
-	if strings.Contains(lower, domain) {
+	if strings.Contains(lower, host) {
 		_ = helper.JSONResponse(newRes{Code: newResponseForbiddenDomain}, w)
 		return
 	}

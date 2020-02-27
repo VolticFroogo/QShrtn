@@ -15,4 +15,4 @@
 # vendor/
 
 # Production environment variables
-production.env
+*.env

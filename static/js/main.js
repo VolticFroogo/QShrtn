@@ -99,7 +99,7 @@ $(document).ready(function(){
 
                     // Forbidden domain.
                     case ResponseCode.ForbiddenDomain:
-                        M.toast({html: "You can not shorten qshr.tn links."});
+                        M.toast({html: "You can not shorten " + window.location.hostname + " links."});
                         break;
 
                     // Taken ID.

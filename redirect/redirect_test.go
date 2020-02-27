@@ -163,7 +163,7 @@ func TestNew(t *testing.T) {
 
 	t.Log("Inserting an invalid redirect due to the URL containing a forbidden domain.")
 	_, decoded, _ = insert(newReq{
-		URL: "https://" + domain + "/test",
+		URL: "http://localhost:8080/test",
 	}, assert, false)
 	assert.Equal(newResponseForbiddenDomain, decoded.Code)
 }
