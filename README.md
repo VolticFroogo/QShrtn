@@ -1,5 +1,6 @@
 # qshr.tn
 [![CircleCI](https://circleci.com/gh/VolticFroogo/QShrtn.svg?style=svg)](https://circleci.com/gh/VolticFroogo/QShrtn)
+[![codecov](https://codecov.io/gh/VolticFroogo/QShrtn/branch/master/graph/badge.svg)](https://codecov.io/gh/VolticFroogo/QShrtn)
 
  The server component for an anonymous, open-source URL shortening service.
 
