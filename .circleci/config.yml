@@ -4,7 +4,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.13.8
+      - image: circleci/golang:1.14.0
         environment:
           DB: mongodb://root:password@localhost/?authSource=admin&appname=qshrtn&ssl=false
           DOMAIN: qshr.tn
