@@ -3,9 +3,14 @@ package handle
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/VolticFroogo/QShrtn/redirect"
 	"github.com/gorilla/mux"
+)
+
+const (
+	defaultPort = "80"
 )
 
 // Start begins listening for all incoming requests.
@@ -33,9 +38,14 @@ func Start() (err error) {
 	r.Handle("/{id}", http.HandlerFunc(redirect.Handle))
 	r.Handle("/{id}/json", http.HandlerFunc(redirect.JSON))
 
-	log.Print("Listening for incoming HTTP requests on port 80.")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = defaultPort
+	}
+
+	log.Printf("Listening for incoming HTTP requests on port %s.", port)
 
 	// Serve plain HTTP responses.
-	err = http.ListenAndServe(":80", r)
+	err = http.ListenAndServe(":"+port, r)
 	return
 }
