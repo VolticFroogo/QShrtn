@@ -20,6 +20,7 @@
         - [production.env](#productionenv)
         - [db.env](#dbenv)
     - [Updating](#updating)
+- [Setup ShareX](sharex.md)
 
 # API
 ## Terminology
